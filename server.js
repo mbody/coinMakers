@@ -1,4 +1,13 @@
-const io = require('socket.io')();
+const express = require('express');
+const bodyParser = require('body-parser')
+const app = express()
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:true}))
+app.use('/', express.static(__dirname + '/frontend'));
+
+const server = require('http').Server(app)
+const io = require('socket.io')(server);
 const { initGame, gameLoop, addPlayer } = require('./game');
 const { FRAME_RATE } = require('./constants');
 const { makeid } = require('./utils');
@@ -110,7 +119,8 @@ function emitGameOver(room, winner) {
 }
 
 const port = process.env.PORT || 3000;
-io.listen(port);
+//io.listen(port);
 
-
-log("Starting server on port " , port);
+server.listen(port, function () {
+  log("Starting server on port " , port);
+})

@@ -1,8 +1,10 @@
 {
   "scripts": {
+    "start": "node server.js",
     "expose": "lt --port 3000 --subdomain makerskids"
   },
   "dependencies": {
+    "express": "^4.17.3",
     "socket.io": "^2.3.0"
   }
 }
