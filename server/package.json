@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "expose": "lt --port 3000 --subdomain makerskids"
+  },
+  "dependencies": {
+    "socket.io": "^2.3.0"
+  }
+}
