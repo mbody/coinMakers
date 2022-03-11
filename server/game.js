@@ -87,8 +87,12 @@ function gameLoop(gameState, direction, playerId) {
   if (gameState.coin.x - DIFF < x && x < gameState.coin.x + DIFF && gameState.coin.y - DIFF < y && y < gameState.coin.y + DIFF) {
     randomCoin(gameState);
     player.points += 5;
-  }
 
+    if(player.points >= 100){
+      player.isWinner = true;
+      return true;
+    }
+  }
 
   return false;
 }
@@ -106,7 +110,6 @@ function randomPlayer(playerId){
     ...randomPos(),
     speed: 3,
   }
-
 }
 
 function randomPos(){
@@ -117,9 +120,9 @@ function randomPos(){
 }
 
 function randomNickname(){
-  var name1 = ["Renard","Chat","Chien","Pinson","Loup", "Requin", "Aigle", "Lion", "Puma", "Escargot", "Scarabée", "Cloporte", "Lézard", "Croco"];
+  var name1 = ["Hippopotame", "Hippocampe", "Loutre", "Renard","Chat","Chien","Pinson","Loup", "Requin", "Aigle", "Lion", "Puma", "Escargot", "Scarabée", "Cloporte", "Lézard", "Croco"];
 
-  var name2 = ["noir", "jaune", "malin", "vert", "gris", "sournois", "malicieux", "rusé", "enragé", "musclé", "intrépide"];
+  var name2 = ["magique", "violet", "invisible", "noir", "jaune", "malin", "vert", "gris", "sournois", "malicieux", "rusé", "enragé", "musclé", "intrépide"];
 
   return name1[Math.floor(Math.random()* name1.length)] + ' ' + name2[Math.floor(Math.random()* name2.length)];
 

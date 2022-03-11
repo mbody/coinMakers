@@ -4,7 +4,7 @@ const app = express()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
-app.use('/', express.static(__dirname + '/frontend'));
+app.use('/', express.static(__dirname + './../frontend'));
 
 const server = require('http').Server(app)
 const io = require('socket.io')(server);
@@ -17,7 +17,7 @@ const clientRooms = {};
 
 
 const log = (msg, data) => {
-  console.log(msg, data);
+  //console.log(msg, data);
 }
 
 io.on('connection', client => {
@@ -35,6 +35,8 @@ io.on('connection', client => {
     client.join(roomName);
     const playerId = makeid(10);
     client.playerId = playerId;
+    gamestate = state[roomName];
+    if(!gamestate) return;
     const player = addPlayer(state[roomName], playerId);
 
     client.emit('init', {playerId, nickname: player.nickname, roomName});
@@ -64,8 +66,12 @@ io.on('connection', client => {
     if (!roomName) {
       return;
     }
-    gameLoop(state[roomName], direction, client.playerId);
-    emitGameState(roomName, state[roomName]);
+    let isWinner = gameLoop(state[roomName], direction, client.playerId);
+    if(isWinner){
+      emitGameOver(roomName, state[roomName]);
+    }else{
+      emitGameState(roomName, state[roomName]);
+    }
   }
 
   function handleKeydown(keyCode) {
@@ -112,10 +118,10 @@ function emitGameState(room, gameState) {
     .emit('gameState', JSON.stringify(gameState));
 }
 
-function emitGameOver(room, winner) {
-  log("Game over" , {room, winner});
+function emitGameOver(room, gameState) {
+  log("Game over" , {room, gameState});
   io.sockets.in(room)
-    .emit('gameOver', JSON.stringify({ winner }));
+    .emit('gameOver', JSON.stringify(gameState));
 }
 
 const port = process.env.PORT || 3000;
