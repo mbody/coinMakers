@@ -1,4 +1,4 @@
-const { DIRECTIONS } = require('./constants');
+const { DIRECTIONS, LIMITS } = require('./constants');
 
 module.exports = {
   initGame,
@@ -8,10 +8,6 @@ module.exports = {
 
 
 // position min max pour la piece
-const minX = 0;
-const maxX = 180;
-const minY = 30;
-const maxY = 110;
 const DIFF = 10;
 
 function initGame(playerId) {
@@ -63,10 +59,10 @@ function gameLoop(gameState, direction, playerId) {
   }
 
   //Limits (gives the illusion of walls)
-  var leftLimit = -8;
-  var rightLimit = (16 * 11) + 8;
-  var topLimit = -8 + 32;
-  var bottomLimit = (16 * 7);
+  var leftLimit = LIMITS.left;
+  var rightLimit = LIMITS.right;
+  var topLimit = LIMITS.top;
+  var bottomLimit = LIMITS.bottom;
   if (x < leftLimit) {
     x = leftLimit;
   }
@@ -114,8 +110,8 @@ function randomPlayer(playerId){
 
 function randomPos(){
   return {
-    x: Math.floor(Math.random()*(maxX-minX)) + minX,
-    y: Math.floor(Math.random()*(maxY-minY)) + minY,
+    x: Math.floor(Math.random()*(LIMITS.right-LIMITS.left)) + LIMITS.left,
+    y: Math.floor(Math.random()*(LIMITS.bottom-LIMITS.top)) + LIMITS.top,
   };
 }
 

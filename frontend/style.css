@@ -80,16 +80,16 @@ body {
     width: calc(var(--pixel-size) * 160);
     height: calc(var(--pixel-size) * 144);
     overflow: hidden;
-    background: #61ddf7;
+    background: #000;
     position:relative;
 }
 
 .map {
     image-rendering: pixelated;
-    background-image: url("https://assets.codepen.io/21542/CameraDemoMap.png");
+    background-image: url("https://github.com/mbody/coinMakers/blob/main/frontend/Image.png?raw=true");
     background-size: 100%;
-    width: calc(13 * var(--grid-cell));
-    height: calc(10 * var(--grid-cell));
+    width: calc(28 * var(--grid-cell));
+    height: calc(28 * var(--grid-cell));
     position: relative;
 }
 

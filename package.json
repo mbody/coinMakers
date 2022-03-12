@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node server/server.js",
+    "start": "nodemon server/server.js",
     "expose": "lt --port 3000 --subdomain makerskids"
   },
   "dependencies": {

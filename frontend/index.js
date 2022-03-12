@@ -2,8 +2,7 @@ const BG_COLOUR = '#231f20';
 const SNAKE_COLOUR = '#c2c2c2';
 const FOOD_COLOUR = '#e66916';
 
-const socket = io(window.location.href);
-//const socket = io('https://makerskids.loca.lt');
+const socket = io('https://makerskids.loca.lt');
 
 socket.on('init', handleInit);
 socket.on('gameState', handleGameState);
@@ -67,23 +66,32 @@ function handleGameState(gameState) {
   }
    */
   log("new game state : ", gameState);
-  GLOBAL.gameState = JSON.parse(gameState);
+
+  var gameState = JSON.parse(gameState);
+
+  gameState.players = gameState.players.sort(function(a,b){ return  b.points - a.points});
+  GLOBAL.gameState = gameState;
   //requestAnimationFrame(() => paintGame(gameState));
 }
 
-function handleGameOver(data) {
-  if (!gameActive) {
-    return;
-  }
-  data = JSON.parse(data);
+function handleGameOver(gameState) {
+  var gameState = JSON.parse(gameState);
+
+  var isWinner = false;
+  gameState.players.forEach(p=>{
+    if(p.isWinner && p.id == GLOBAL.currentPlayerId){
+      isWinner = true;
+    }
+  });
 
   gameActive = false;
 
-  if (data.winner === playerNumber) {
+  if (isWinner) {
     alert('You Win!');
   } else {
     alert('You Lose :(');
   }
+  reset();
 }
 
 function handleGameCode(gameCode) {
@@ -160,13 +168,15 @@ const gameLoop = () => {
 
 
 //Set up the game loop
+/*
 const step = () => {
   gameLoop();
   window.requestAnimationFrame(() => {
     step();
   })
-}
-step(); //kick off the first step!
+}*/
+//step(); //kick off the first step!
+setInterval(gameLoop, 30);
 
 
 /* Direction key state */
