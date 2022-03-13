@@ -19,9 +19,12 @@ const LIMITS = {
   bottom:(TILE_SIZE * MAP_HEIGHT)-2*TILE_SIZE,
 }
 
+const MAX_SCORE = 10;
+
 module.exports = {
   FRAME_RATE,
   GRID_SIZE,
   DIRECTIONS,
-  LIMITS
+  LIMITS,
+  MAX_SCORE
 }

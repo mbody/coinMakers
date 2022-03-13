@@ -1,17 +1,17 @@
-const { DIRECTIONS, LIMITS } = require('./constants');
+const { DIRECTIONS, LIMITS, MAX_SCORE } = require('./constants');
 
 module.exports = {
   initGame,
   gameLoop,
-  addPlayer
+  addPlayer,
 }
-
 
 // position min max pour la piece
 const DIFF = 10;
 
 function initGame(playerId) {
   const state = createGameState(playerId)
+  state.lastUpdate = Date.now();
   randomCoin(state);
   return state;
 }
@@ -26,6 +26,7 @@ function createGameState(playerId) {
 }
 
 function addPlayer(gameState, playerId){
+  gameState.lastUpdate = Date.now();
   const player = randomPlayer(playerId);
   gameState.players.push(player);
   return player;
@@ -34,6 +35,7 @@ function addPlayer(gameState, playerId){
 function gameLoop(gameState, direction, playerId) {
 
   let player;
+  gameState.lastUpdate = Date.now();
   gameState.players.forEach(p => {
     if(p.id == playerId) player = p;
   });
@@ -84,8 +86,9 @@ function gameLoop(gameState, direction, playerId) {
     randomCoin(gameState);
     player.points += 5;
 
-    if(player.points >= 100){
+    if(player.points >= MAX_SCORE){
       player.isWinner = true;
+      gameState.isGameOver = true;
       return true;
     }
   }

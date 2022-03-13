@@ -41,8 +41,9 @@ io.on('connection', client => {
 
     client.emit('init', {playerId, nickname: player.nickname, roomName});
 
-    emitGameState(roomName, state[roomName]);
+    //emitGameState(roomName, state[roomName]);
     //startGameInterval(roomName);
+
   }
 
   function handleNewGame() {
@@ -59,6 +60,8 @@ io.on('connection', client => {
     client.emit('init', {playerId, roomName, nickname: state[roomName].players[0].nickname});
     emitGameState(roomName, state[roomName]);
     log("New game" , {roomName, state:state[roomName], nickname: state[roomName].players[0].nickname});
+    startGameInterval(roomName);
+
   }
 
   function handleInput(direction){
@@ -68,9 +71,8 @@ io.on('connection', client => {
     }
     let isWinner = gameLoop(state[roomName], direction, client.playerId);
     if(isWinner){
-      emitGameOver(roomName, state[roomName]);
-    }else{
       emitGameState(roomName, state[roomName]);
+      emitGameOver(roomName, state[roomName]);
     }
   }
 
@@ -95,21 +97,24 @@ io.on('connection', client => {
   }
 });
 
-/*
+
 function startGameInterval(roomName) {
   const intervalId = setInterval(() => {
-    const winner = gameLoop(state[roomName]);
+    const gameState = state[roomName];
+    const isGameOver = gameState.isGameOver;
 
-    if (!winner) {
-      emitGameState(roomName, state[roomName])
+    if (!isGameOver) {
+      if(gameState.lastUpdate != gameState.lastEmit){
+        gameState.lastUpdate = gameState.lastEmit;
+        emitGameState(roomName, state[roomName])
+      }
     } else {
-      emitGameOver(roomName, winner);
       state[roomName] = null;
       clearInterval(intervalId);
     }
   }, 1000 / FRAME_RATE);
 }
-*/
+
 
 function emitGameState(room, gameState) {
   log("Game state" , {room, gameState});
