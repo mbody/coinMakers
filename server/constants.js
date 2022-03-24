@@ -1,4 +1,4 @@
-const FRAME_RATE = 10;
+const FRAME_RATE = 30;
 const GRID_SIZE = 20;
 
 const DIRECTIONS = {
@@ -19,7 +19,7 @@ const LIMITS = {
   bottom:(TILE_SIZE * MAP_HEIGHT)-2*TILE_SIZE,
 }
 
-const MAX_SCORE = 10;
+const MAX_SCORE = 50;
 
 module.exports = {
   FRAME_RATE,
